@@ -1,19 +1,16 @@
+// Copyright (c) Reaptor AB. All rights reserved.
+// Licensed under the GNU Affero General Public License v3.0. See LICENSE in the project root for license information.
+
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System.Net;
 using System.Net.Http;
 using OpenVisitor.Services;
-using Microsoft.JSInterop;
 
 namespace OpenVisitor
 {

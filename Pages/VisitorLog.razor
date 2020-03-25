@@ -1,8 +1,11 @@
-﻿@page "/visitorlog"
-@using System.Globalization
+﻿@*
+Copyright (c) Reaptor AB. All rights reserved.
+Licensed under the GNU Affero General Public License v3.0. See LICENSE in the project root for license information.
+*@
+
+@page "/visitorlog"
 @using OpenVisitor.Contracts
 @inject Debouncer SearchDebouncer
-@* @inject VisitorLogService VisitorLogService; *@
 @inject HttpClient Http;
 
 <style>
