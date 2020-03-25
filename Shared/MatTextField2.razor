@@ -1,0 +1,37 @@
+﻿@inject IJSRuntime JSRuntime;
+
+<div>
+    <label @ref="mdcTextField" class="mdc-text-field mdc-text-field--outlined">
+        <input type="text" @oninput="OnValueChanged" value="@Value" class="mdc-text-field__input">
+        <div class="mdc-notched-outline">
+            <div class="mdc-notched-outline__leading"></div>
+            <div class="mdc-notched-outline__notch">
+                <span class="mdc-floating-label">@Label</span>
+            </div>
+            <div class="mdc-notched-outline__trailing"></div>
+        </div>
+    </label>
+</div>
+@code {
+    ElementReference mdcTextField;
+
+    [Parameter]
+    public string Label { get; set; } = "";
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        await JSRuntime.InvokeVoidAsync("mdc.textField.MDCTextField.attachTo", mdcTextField);
+    }
+
+    Task OnValueChanged(ChangeEventArgs e)
+    {
+        Value = e.Value?.ToString() ?? "";
+        return ValueChanged.InvokeAsync(Value);
+    }
+
+    [Parameter]
+    public string Value { get; set; } = "";
+
+    [Parameter]
+    public EventCallback<string> ValueChanged { get; set; }
+}

@@ -1,0 +1,27 @@
+﻿@using Microsoft.Extensions.Options
+
+<AuthorizeView>
+    <Authorized>
+        @if (canEditProfile)
+        {
+            <a href="AzureADB2C/Account/EditProfile">Hello, @context.User.Identity.Name!</a>
+        }
+        else
+        {
+            var userId = @context.User.Claims.FirstOrDefault(x => x.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier")?.Value;
+            <text>Hello, @context.User.Identity.Name!</text>
+        }
+        <a href="AzureADB2C/Account/SignOut">Log out</a>
+    </Authorized>
+    <NotAuthorized>
+        <a href="AzureADB2C/Account/SignIn">Log in</a>
+    </NotAuthorized>
+</AuthorizeView>
+
+@code {
+    private bool canEditProfile = false;
+
+    protected override void OnInitialized()
+    {
+    }
+}

@@ -1,0 +1,39 @@
+html, body {
+    margin: 0px;
+}
+
+html, body, h1, h2, h3, h4, h5, h6, p, div, table, tr, th, td {
+    font-family: Roboto, sans-serif;
+}
+
+.mdc-drawer {
+    box-shadow: 2px 0px 2px 0px rgba(199, 199, 199, 0.29);
+}
+
+.visitors-grid {
+    margin: 0px;
+}
+
+.body {
+    padding: 20px;
+}
+
+.visitors-grid th {
+    cursor: pointer;
+}
+
+.align-right {
+    float: right;
+}
+
+.mdc-text-field--focused:not(.mdc-text-field--disabled) .mdc-floating-label {
+    color: #004ba0
+}
+
+.mdc-table, .mdc-table th, .mdc-table tr, .mdc-table td {
+    font-size: 1.0rem;
+}
+
+h4:first-child {
+    margin-block-start: 0px;
+}

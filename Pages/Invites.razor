@@ -1,0 +1,33 @@
+﻿@page "/invites"
+
+<MatTable Items="@visitors" class="visitors-grid mat-elevation-z5">
+    <MatTableHeader>
+        <th nowrap>Name</th>
+        <th nowrap>Host</th>
+        <th nowrap>Signed in</th>
+        <th nowrap>Signed out</th>
+    </MatTableHeader>
+    <MatTableRow>
+        <td nowrap>@context.Name</td>
+        <td nowrap>@context.Host</td>
+        <td>@context.SignedInAt</td>
+        <td>@context.SignedOutAt</td>
+    </MatTableRow>
+</MatTable>
+
+@code {
+
+    IEnumerable<Visitor> visitors = new [] {
+        new Visitor { Host = "Sten Löfberg", Name = "Kristofer Löfberg", SignedInAt = "16:16", SignedOutAt = ""},
+        new Visitor { Host = "Sten Löfberg", Name = "Anders Löfberg", SignedInAt = "08:16", SignedOutAt = "14:30"}
+    }
+    .OrderByDescending(x => x.SignedInAt);
+
+    class Visitor
+    {
+        public string Name { get; set; } = "";
+        public string Host { get; set; } = "";
+        public string SignedInAt { get; set; } = "";
+        public string SignedOutAt { get; set; } = "";
+    }
+}

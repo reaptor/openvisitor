@@ -1,0 +1,51 @@
+@page "/visitorlog/new"
+@using OpenVisitor.Contracts
+@inject History History
+@inject NavigationManager NavigationManager
+@inject HttpClient Http;
+
+<style>
+.new-visitor-form {
+    max-width: 600px;
+}
+.new-visitor-form .form-field {
+    margin-bottom: 20px;
+}
+.new-visitor-form .form-field, .new-visitor-form .mdc-text-field {
+    width: 100%;
+}
+
+</style>
+<div class="mat-layout-grid mdc-layout-grid--align-left new-visitor-form">
+    <div class="mdc-layout-grid__cell">
+
+        <h4 class="mat-h5">New visitor</h4>
+
+        <div class="form-field">
+            <MatTextField @bind-Value="Name" Label="Name"></MatTextField>
+        </div>
+        <div class="form-field">
+            <MatTextField @bind-Value="Host" Label="Host"></MatTextField>
+        </div>
+    </div>
+    <div class="mdc-layout-grid__cell">
+
+        <div class="align-right">
+            <MatButton Outlined="true" @onclick="SignIn">Sign in visitor</MatButton>
+            <MatButton Outlined="true" @onclick="History.Back">Cancel</MatButton>
+        </div>
+
+    </div>
+</div>
+
+@code {
+    string Name { get; set; } = "";
+    string Host { get; set; } = "";
+
+    async Task SignIn()
+    {
+        await Http.PostJsonAsync("api/visitors", new Visitor { Name = Name, Host = Host });
+        Console.WriteLine("never here");
+        NavigationManager.NavigateTo("/visitorlog");
+    }
+}
