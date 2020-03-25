@@ -79,7 +79,14 @@
     void FilterVisitors()
     {
         InvokeAsync(async () => {
-            this.visitors = await Http.GetJsonAsync<IEnumerable<Visitor>>("api/visitors"); //await VisitorLogService.GetVisitorLog(FilterDate, FilterText);
+            try
+            {
+                this.visitors = await Http.GetJsonAsync<IEnumerable<Visitor>>($"api/visitors?date={FilterDate.ToISO8601String()}&filter={FilterText}");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+            }
             StateHasChanged();
         });
     }

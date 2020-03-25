@@ -1,4 +1,5 @@
 @page "/visitorlog/new"
+@using System.ComponentModel.DataAnnotations
 @using OpenVisitor.Contracts
 @inject History History
 @inject NavigationManager NavigationManager
@@ -16,36 +17,45 @@
 }
 
 </style>
-<div class="mat-layout-grid mdc-layout-grid--align-left new-visitor-form">
-    <div class="mdc-layout-grid__cell">
+<EditForm Model="Model" OnValidSubmit="SignIn">
+    <DataAnnotationsValidator />
 
-        <h4 class="mat-h5">New visitor</h4>
-
-        <div class="form-field">
-            <MatTextField @bind-Value="Name" Label="Name"></MatTextField>
+    <div class="mat-layout-grid mdc-layout-grid--align-left new-visitor-form">
+        <div class="mdc-layout-grid__cell">
+            <h4 class="mat-h5">New visitor</h4>
+            <div class="form-field">
+                <MatTextField @bind-Value="Model.Name" Label="Name"/>
+                <ValidationMessage For="@(() => Model.Name)" />
+            </div>
+            <div class="form-field">
+                <MatTextField @bind-Value="Model.Host" Label="Host"/>
+                <ValidationMessage For="@(() => Model.Host)" />
+            </div>
         </div>
-        <div class="form-field">
-            <MatTextField @bind-Value="Host" Label="Host"></MatTextField>
+        <div class="mdc-layout-grid__cell">
+
+            <div class="align-right">
+                <MatButton Outlined="true" ype="submit">Sign in visitor</MatButton>
+                <MatButton Outlined="true" @onclick="History.Back">Cancel</MatButton>
+            </div>
+
         </div>
     </div>
-    <div class="mdc-layout-grid__cell">
-
-        <div class="align-right">
-            <MatButton Outlined="true" @onclick="SignIn">Sign in visitor</MatButton>
-            <MatButton Outlined="true" @onclick="History.Back">Cancel</MatButton>
-        </div>
-
-    </div>
-</div>
+</EditForm>
 
 @code {
-    string Name { get; set; } = "";
-    string Host { get; set; } = "";
+    Visitor Model = new Visitor();
 
     async Task SignIn()
     {
-        await Http.PostJsonAsync("api/visitors", new Visitor { Name = Name, Host = Host });
-        Console.WriteLine("never here");
+        try
+        {
+            await Http.PostJsonAsync("api/visitors", Model);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex);
+        }
         NavigationManager.NavigateTo("/visitorlog");
     }
 }

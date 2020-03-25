@@ -13,6 +13,7 @@ using Microsoft.Extensions.Hosting;
 using System.Net;
 using System.Net.Http;
 using OpenVisitor.Services;
+using Microsoft.JSInterop;
 
 namespace OpenVisitor
 {
@@ -31,13 +32,28 @@ namespace OpenVisitor
         {
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
 
-            services.AddScoped<HttpClient>();
+            services.AddScoped<HttpClient>(s =>
+            {
+                // Creating the URI helper needs to wait until the JS Runtime is initialized, so defer it.
+                var uriHelper = s.GetRequiredService<NavigationManager>();
+                var env = s.GetRequiredService<IWebHostEnvironment>();
+                var handler =
+                    env.IsDevelopment()
+                    ? new HttpClientHandler
+                        {
+                            ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
+                        }
+                    : new HttpClientHandler();
+                return new HttpClient(handler)
+                {
+                    BaseAddress = new Uri(uriHelper.BaseUri)
+                };
+            });
 
             services.AddControllers();
 
             services.AddTransient<Debouncer>();
             services.AddTransient<History>();
-            services.AddTransient<VisitorLogService>();
 
             services.AddRazorPages();
             services.AddServerSideBlazor();

@@ -1,7 +1,7 @@
 ﻿@inherits LayoutComponentBase
 
 <MatAppBarContainer>
-    <MatAppBar Fixed="true">
+    <MatAppBar Fixed="true" style="z-index: 100;">
         <MatAppBarRow>
             <MatAppBarSection>
                 <MatIconButton Icon="menu"></MatIconButton>
@@ -13,7 +13,7 @@
         </MatAppBarRow>
     </MatAppBar>
     <MatAppBarContent>
-        <MatDrawerContainer Style="width: 100vw; height: 100vh;" Class="full">
+        <MatDrawerContainer Style="width: 100vw; height: 100vh;">
             <MatDrawer @bind-Opened="@Opened">
                 <NavMenu />
                 @* <footer class="drawer-footer">
@@ -41,17 +41,3 @@
         Opened = !Opened;
     }
 }
-@* <div class="sidebar">
-    <NavMenu />
-</div>
-
-<div class="main">
-    <div class="top-row px-4 auth">
-        <LoginDisplay />
-        <a href="https://docs.microsoft.com/aspnet/" target="_blank">About</a>
-    </div>
-
-    <div class="content px-4">
-        @Body
-    </div>
-</div> *@
