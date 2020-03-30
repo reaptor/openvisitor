@@ -1,0 +1,13 @@
+@*
+Copyright (c) Reaptor AB. All rights reserved.
+Licensed under the GNU Affero General Public License v3.0. See LICENSE in the project root for license information.
+*@
+
+@inject NavigationManager Navigation
+@using Microsoft.AspNetCore.Components.WebAssembly.Authentication
+@code {
+    protected override void OnInitialized()
+    {
+        Navigation.NavigateTo($"authentication/login?returnUrl={Navigation.Uri}");
+    }
+}
