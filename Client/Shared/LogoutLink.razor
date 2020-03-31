@@ -1,0 +1,36 @@
+﻿@*
+Copyright (c) Reaptor AB. All rights reserved.
+Licensed under the GNU Affero General Public License v3.0. See LICENSE in the project root for license information.
+*@
+
+@using Microsoft.AspNetCore.Components.Authorization
+@using Microsoft.AspNetCore.Components.WebAssembly.Authentication
+
+@inject NavigationManager Navigation
+@inject SignOutSessionStateManager SignOutManager
+
+<style>
+a {
+    color: white;
+    text-decoration: none;
+}
+</style>
+
+<AuthorizeView>
+    <Authorized>
+        <a href="authentication/profile">@context.User.Identity.Name!</a>&nbsp;&nbsp;
+        <a href="#" @onclick="BeginSignOut">Log out</a>
+    </Authorized>
+    @* <NotAuthorized>
+        <a href="authentication/register">Register</a>
+        <a href="authentication/login">Log in</a>
+    </NotAuthorized> *@
+</AuthorizeView>
+
+@code{
+    private async Task BeginSignOut(MouseEventArgs args)
+    {
+        await SignOutManager.SetSignOutState();
+        Navigation.NavigateTo("authentication/logout");
+    }
+}

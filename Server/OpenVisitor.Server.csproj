@@ -9,7 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Watch Include="..\**\*" Exclude="**\node_modules\*;..\**\*.js.map;..\**\obj\**\*;..\**\bin\**\*" />
+    <Watch Include="..\**\*.cs;..\**\*.razor;..\**\*.cshtml" Exclude="**\node_modules\*;..\**\*.js.map;..\**\obj\**\*;..\**\bin\**\*;**\*.db" />
   </ItemGroup>
 
   <ItemGroup>

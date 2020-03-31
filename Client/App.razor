@@ -2,7 +2,7 @@
     <MatThemeProvider Theme="@theme1">
         <Router AppAssembly="@typeof(Program).Assembly">
             <Found Context="routeData">
-                <AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)">
+                <AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof(AnonymousLayout)">
                     <NotAuthorized>
                         <RedirectToLogin />
                     </NotAuthorized>
