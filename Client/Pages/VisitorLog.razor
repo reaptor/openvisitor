@@ -5,9 +5,11 @@ Licensed under the GNU Affero General Public License v3.0. See LICENSE in the pr
 
 @page "/visitorlog"
 @using Microsoft.AspNetCore.Authorization
+@using Microsoft.Extensions.Logging
 @using OpenVisitor.Shared
 @inject Debouncer SearchDebouncer
-@inject ApiClient Api;
+@inject ApiClient ApiClient
+@inject ILogger<VisitorLog> Logger
 @attribute [Authorize]
 
 <style>
@@ -85,18 +87,15 @@ Licensed under the GNU Affero General Public License v3.0. See LICENSE in the pr
     {
         InvokeAsync(async () =>
         {
-            await Api.Authorized(async http =>
+            try
             {
-                try
-                {
-                    this.visitors = await http.GetJsonAsync<IEnumerable<Visitor>>($"visitors?date={FilterDate.ToIso8601String()}&filter={FilterText}");
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine(ex);
-                }
-                StateHasChanged();
-            });
+                this.visitors = await ApiClient.GetJsonAsync<IEnumerable<Visitor>>($"visitors?date={FilterDate.ToIso8601String()}&filter={FilterText}");
+            }
+            catch (Exception ex)
+            {
+                Logger.LogError(ex, $"Failed to get visitors");
+            }
+            StateHasChanged();
         });
     }
 }

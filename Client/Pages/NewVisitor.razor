@@ -4,10 +4,12 @@ Licensed under the GNU Affero General Public License v3.0. See LICENSE in the pr
 *@
 
 @page "/visitorlog/new"
+@using Microsoft.Extensions.Logging
 @using OpenVisitor.Shared
 @inject History History
 @inject NavigationManager NavigationManager
-@inject HttpClient Http;
+@inject ApiClient ApiClient
+@inject ILogger<NewVisitor> Logger
 
 <style>
 .new-visitor-form {
@@ -54,11 +56,12 @@ Licensed under the GNU Affero General Public License v3.0. See LICENSE in the pr
     {
         try
         {
-            await Http.PostJsonAsync("visitors", Model);
+            await ApiClient.PostJsonAsync("visitors", Model);
+            Logger.LogInformation("Sucesfully added visitor");
         }
         catch (Exception ex)
         {
-            Console.WriteLine(ex);
+            Logger.LogError(ex, "Add visitor failed");
         }
         NavigationManager.NavigateTo("/visitorlog");
     }

@@ -3,36 +3,46 @@
 
 using System;
 using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
+using Microsoft.Extensions.Logging;
 
 namespace OpenVisitor.Client.Shared
 {
-    public class ApiClient
+    public class ApiClient : HttpClient
+    {
+        public ApiClient(IAccessTokenProvider authenticationService, NavigationManager navigation, ILogger<ApiClient> logger)
+            : base(new AuthorizingHttpClientHandler(authenticationService))
+        {
+            BaseAddress = new Uri(navigation.BaseUri);
+        }
+    }
+
+    class AuthorizingHttpClientHandler : HttpClientHandler
     {
         private readonly IAccessTokenProvider _authenticationService;
-        private readonly NavigationManager _navigation;
 
-        public ApiClient(IAccessTokenProvider authenticationService, NavigationManager navigation)
+        public AuthorizingHttpClientHandler(IAccessTokenProvider authenticationService)
         {
             _authenticationService = authenticationService;
-            _navigation = navigation;
         }
 
-        public async Task Authorized(Action<HttpClient> action)
+        protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
-            var httpClient = new HttpClient {BaseAddress = new Uri(_navigation.BaseUri)};
             var tokenResult = await _authenticationService.RequestAccessToken();
             if (tokenResult.TryGetToken(out var token))
             {
-                httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {token.Value}");
-                action(httpClient);
+                request.Headers.Authorization = new AuthenticationHeaderValue($"Bearer", token.Value);
             }
             else
             {
-                _navigation.NavigateTo(tokenResult.RedirectUrl);
+                throw new Exception($"Bearer token request failed.");
             }
+
+            return await base.SendAsync(request, cancellationToken);
         }
     }
 }
